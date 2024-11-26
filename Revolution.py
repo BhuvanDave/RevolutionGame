@@ -85,10 +85,7 @@ money, red_count, yellow_count = load_data()
 timer = None
 
 
-
-
-#Everything below handles the GUI
-
+#region GUI using tkinter
 # Create the main window
 root = tk.Tk()
 root.title("Idle Game")
@@ -99,7 +96,7 @@ main_frame = tk.Frame(root)
 main_frame.pack(fill="both", expand=True, padx=10, pady=10)
 
 
-
+#region Top Panel
 # Create a top panel to display auto income count and auto upgrade count
 top_panel = tk.Frame(main_frame)
 top_panel.grid(row=0, column=0, columnspan=2, pady=10)
@@ -111,9 +108,9 @@ red_count_label.grid(row=0, column=0, padx=20)
 # Create and pack the auto upgrade count label on the top panel
 yellow_count_label = tk.Label(top_panel, text=f"Orange Count: {yellow_count}", font=("Arial", 16))
 yellow_count_label.grid(row=0, column=1, padx=20)
+#endregion
 
-
-
+#region Left Panel
 # Create a left panel to hold the buttons
 left_panel = tk.Frame(main_frame)
 left_panel.grid(row=1, column=0, padx=10, pady=10)
@@ -130,32 +127,37 @@ buy_orange_button.grid(row=1, column=0, padx=10, pady=10, sticky="n")
 buy_yellow_button = Button(left_panel, text="Buy Yellow ($1000)", font=("Arial", 14), command=buy_yellow, bg="yellow", fg="black")
 buy_yellow_button.grid(row=2, column=0, padx=10, pady=10, sticky="n")
 
+# endregion
 
-
-
-
-
+#region Middle Panel 
 # Create a middle panel with 3 columns
 middle_panel = tk.Frame(main_frame)
 middle_panel.grid(row=1, column=1, pady=10, padx=10)
 
+# Create progress variables for each bar
+progress_red = tk.IntVar()
+progress_orange = tk.IntVar()
+progress_yellow = tk.IntVar()
 
-# Column 1: Add a label or any widget you want
-middle_column_1_label = tk.Label(middle_panel, text="Column 1", font=("Arial", 16))
-middle_column_1_label.grid(row=0, column=0, padx=10)
+# Create a canvas to draw the progress bars
+bars = {
+    'red': tk.Canvas(middle_panel, width=50, height=100, bg="white"),
+    'orange': tk.Canvas(middle_panel, width=50, height=100, bg="white"),
+    'yellow': tk.Canvas(middle_panel, width=50, height=100, bg="white")
+}
 
-# Column 2: Add another label or widget
-middle_column_2_label = tk.Label(middle_panel, text="Column 2", font=("Arial", 16))
-middle_column_2_label.grid(row=0, column=1, padx=10)
+# Grid the canvases next to each other (no padding)
+bars['red'].grid(row=1, column=0)
+bars['orange'].grid(row=1, column=1)
+bars['yellow'].grid(row=1, column=2)
 
-# Column 3: Add another label or widget
-middle_column_3_label = tk.Label(middle_panel, text="Column 3", font=("Arial", 16))
-middle_column_3_label.grid(row=0, column=2, padx=10)
+# Create the vertical rectangles for each color
+bars['red_rect'] = bars['red'].create_rectangle(0, 100, 50, 100, fill="red", outline="")
+bars['orange_rect'] = bars['orange'].create_rectangle(0, 100, 50, 100, fill="orange", outline="")
+bars['yellow_rect'] = bars['yellow'].create_rectangle(0, 100, 50, 100, fill="yellow", outline="")
+#endregion
 
-
-
-
-
+#region Right Panel
 # Create a right panel to hold the information
 right_panel = tk.Frame(main_frame)
 right_panel.grid(row=1, column=2, padx=10, pady=10)
@@ -171,7 +173,8 @@ add_money_button.grid(row=1, column=0, pady=10)
 # Create and pack the "Reset" button
 reset_button = tk.Button(right_panel, text="Reset to $0", font=("Arial", 18), command=reset_money)
 reset_button.grid(row=2, column=0, pady=10)
-
+#endregion
+#endregion
 
 # Start generating auto income
 start_timer()
